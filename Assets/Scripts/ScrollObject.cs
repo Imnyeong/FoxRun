@@ -3,12 +3,11 @@ using UnityEngine;
 
 public class ScrollObject : MonoBehaviour
 {
+    public bool canStop = false;
     public float speed = 1.0f;
     public float moveValue = -0.01f;
     public float startPosition;
     public float endPosition;
-
-    public bool down = false;
 
     private float coroutineDelay = 0.01f;
     void Start()
@@ -20,7 +19,16 @@ public class ScrollObject : MonoBehaviour
     {
         yield return new WaitForSecondsRealtime(coroutineDelay);
 
-        if (!down)
+        if(!GameManager.instance.isPlay)
+        {
+            StopCoroutine(ScrollCoroutine());
+        }
+
+        if (Character.instance.inputCrouch && canStop)
+        {
+
+        }
+        else
         {
             if (transform.position.x <= endPosition)
             {
@@ -28,7 +36,7 @@ public class ScrollObject : MonoBehaviour
             }
             else
             {
-                transform.Translate(speed * -0.01f, 0, 0);
+                transform.Translate(speed * moveValue, 0, 0);
             }
         }
         StartCoroutine(ScrollCoroutine());
