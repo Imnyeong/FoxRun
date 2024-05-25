@@ -35,6 +35,13 @@ public class ScrollObject : MonoBehaviour
     }
     void ScrollEnd()
     {
-        transform.Translate(-1 * (endPosition - startPosition), 0 , 0);
+        if (this.GetComponent<RandomPosition>() != null)
+        {
+            this.GetComponent<RandomPosition>().RandomPos();
+        }
+        else
+        {
+            transform.Translate(-1 * (endPosition - startPosition), 0, 0);
+        }
     }
 }
