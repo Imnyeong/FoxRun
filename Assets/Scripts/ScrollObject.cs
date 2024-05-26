@@ -19,12 +19,7 @@ public class ScrollObject : MonoBehaviour
     {
         yield return new WaitForSecondsRealtime(coroutineDelay);
 
-        if(!GameManager.instance.isPlay)
-        {
-            StopCoroutine(ScrollCoroutine());
-        }
-
-        if (Character.instance.inputCrouch && canStop)
+        if (!GameManager.instance.isPlay || (Character.instance.isCrouch && canStop))
         {
 
         }

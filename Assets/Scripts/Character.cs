@@ -11,7 +11,8 @@ public class Character : MonoBehaviour
 
     [HideInInspector] public bool inputCrouch = false;
     [HideInInspector] public bool inputJump = false;
-    [HideInInspector] public bool UnBeatTime = false;
+    [HideInInspector] public bool unBeatTime = false;
+    [HideInInspector] public bool isCrouch = false;
 
     [SerializeField] private Rigidbody2D rigid;
     [SerializeField] private Image image;
@@ -21,6 +22,7 @@ public class Character : MonoBehaviour
     private bool isJump = false;
     private bool isDie = false;
     private int health;
+    private float jumpDelay = 1.8f;
 
     private void Awake()
     {
@@ -29,86 +31,96 @@ public class Character : MonoBehaviour
             instance = this;
         }
     }
+
     void Start()
     {   
         health = maxHealth;
     }
     private void Update()
     {
-        if (!GameManager.instance.isPlay)
+        if (!GameManager.instance.isPlay || isDie)
             return;
         CharacterAction();
     }
     public void Move(bool _isplay)
     {
-        animator.SetBool("Move", inputCrouch);
+        animator.SetBool("Move", _isplay);
     }
     private void CharacterAction()
     {
-        if (health == 0)
-        {
-            if (!isDie)
-            {
-                isDie = true;
-            }
-            return;
-        }
-
         if (inputJump && !isJump)
         {
-            Jump();
+            StartCoroutine(JumpCoroutine());
         }
-
         Crouch();
     }
 
     void Crouch()
     {
-        animator.SetBool("Crouch", inputCrouch);
+        if(isJump)
+            return;
 
-        if (!inputCrouch)
-        {
-            boxCollider.offset = new Vector2(-0.1f, -0.3f);
-            boxCollider.size = new Vector2(1.2f, 1.4f);
-        }
-        if(inputCrouch)
+        isCrouch = inputCrouch;
+        animator.SetBool("Crouch", isCrouch);
+
+        if (inputCrouch)
         {
             boxCollider.offset = new Vector2(0.1f, -0.4f);
             boxCollider.size = new Vector2(1.3f, 1.2f);
         }
+        else
+        {
+            boxCollider.offset = new Vector2(-0.1f, -0.3f);
+            boxCollider.size = new Vector2(1.2f, 1.4f);
+        }
     }
 
-    public void Jump()
+    private IEnumerator JumpCoroutine()
     {
         isJump = true;
+
         animator.SetTrigger("Jump");
         rigid.AddForce(new Vector2(0, jumpPower), ForceMode2D.Impulse);
-    }
 
+        yield return new WaitForSecondsRealtime(jumpDelay);
+
+        inputJump = false;
+        isJump = false;
+    }
     void OnTriggerEnter2D(Collider2D other) 
     {
-        if(other.gameObject.layer == 0)
-        {
-            isJump = false;
-            inputJump = false;
-        }
-
-        if(other.gameObject.tag == "Monster" && !UnBeatTime)
+        if (other.gameObject.tag == "Monster" && !unBeatTime)
         {
             animator.SetTrigger("Hurt");
             health--;
-            UnBeatTime = true;
-            StartCoroutine(UnBeat());
+            UIManager.instance.hpIcons[health].color = new Color32(255, 255, 255, 0);
+            if(health <= 0)
+            {
+                StopCoroutine(HitCoroutine());
+                Die();
+            }
+            else 
+            {
+                unBeatTime = true;
+                StartCoroutine(HitCoroutine());
+            }
+        }
+        else if (other.gameObject.tag == "Item" && health < maxHealth)
+        {
+            health++;
+            UIManager.instance.hpIcons[health].color = new Color32(255, 255, 255, 255);
         }
     }
 
     void Die()
     {
-        //GM.StartButton.SetActive(true);
-        //SceneManager.LoadScene(0);
+        isDie = true;
+        animator.SetBool("Move", false);
+        GameManager.instance.isPlay = false;
+        GameManager.instance.GameOver();
     }
 
-    private IEnumerator UnBeat()
+    private IEnumerator HitCoroutine()
     {
         int count = 0;
         while(count < 10)
@@ -121,11 +133,10 @@ public class Character : MonoBehaviour
             {
                 image.color = new Color32(255,255,255,180);
             }
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSecondsRealtime(0.2f);
             count++;
         }
-        animator.SetBool("Hurt", false);
-        UnBeatTime = false;
-        yield return null;
+        image.color = new Color32(255, 255, 255, 255);
+        unBeatTime = false;
     }
 }

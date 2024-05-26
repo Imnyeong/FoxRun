@@ -1,13 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance = null;
-
     public bool isPlay = false;
-
     public GameObject StartButton;
     private void Awake()
     {
@@ -21,11 +17,14 @@ public class GameManager : MonoBehaviour
         isPlay = true;
         StartButton.SetActive(false);
         Character.instance.Move(isPlay);
+        UIManager.instance.ShowUI();
+        ScoreManager.instance.StartScore();
     }
     public void GameOver()
     {
         isPlay = false;
-        StartButton.SetActive(true);
         Character.instance.Move(isPlay);
+        UIManager.instance.HideUI();
+        UIManager.instance.gameoverPanel.ShowPanel(ScoreManager.instance.score);
     }
 }
