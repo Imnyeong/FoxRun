@@ -1,24 +1,20 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ScrollObject : MonoBehaviour
 {
     public bool canStop = false;
-    public float speed = 1.0f;
-    public float moveValue = -0.01f;
+    public float speed;
+    private float moveValue = -1f;
     public float startPosition;
     public float endPosition;
 
-    private float coroutineDelay = 0.01f;
-    void Start()
+    private void Update()
     {
-        StartCoroutine(ScrollCoroutine());
+        DoScroll();
     }
 
-    private IEnumerator ScrollCoroutine()
+    private void DoScroll()
     {
-        yield return new WaitForSecondsRealtime(coroutineDelay);
-
         if (!GameManager.instance.isPlay || (Character.instance.isCrouch && canStop))
         {
 
@@ -31,11 +27,11 @@ public class ScrollObject : MonoBehaviour
             }
             else
             {
-                transform.Translate(speed * moveValue, 0, 0);
+                transform.Translate(speed * moveValue * Time.deltaTime, 0, 0);
             }
         }
-        StartCoroutine(ScrollCoroutine());
     }
+
     void ScrollEnd()
     {
         if (this.GetComponent<RandomPosition>() != null)
