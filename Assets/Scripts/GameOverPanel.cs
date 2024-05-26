@@ -14,10 +14,12 @@ public class GameOverPanel : MonoBehaviour
     {
         replayButton.onClick.AddListener(delegate 
         {
+            AudioManager.instance.PlayClickSound();
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         });
         exitButton.onClick.AddListener(delegate
         {
+            AudioManager.instance.PlayClickSound();
             Application.Quit();
         });
     }
