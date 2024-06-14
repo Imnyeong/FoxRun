@@ -15,8 +15,6 @@ public class UIManager : MonoBehaviour
     public GameOverPanel gameoverPanel;
 
     [SerializeField] private Button rankingButton;
-    private const float km = 1000.0f;
-
     public enum UIType
     {
         Intro,
@@ -32,6 +30,7 @@ public class UIManager : MonoBehaviour
         }
         rankingButton.onClick.AddListener(delegate
         {
+            AudioManager.instance.PlayEffect(AudioManager.EffectType.Click);
             ChangeUI(UIType.Ranking);
         });
     }
@@ -52,13 +51,6 @@ public class UIManager : MonoBehaviour
     }
     public void SetScore(float _score)
     {
-        if(_score >= km)
-        {
-            scoreText.text = $"{(_score / km).ToString("F1")} km";
-        }
-        else
-        {
-            scoreText.text = $"{_score.ToString("F1")} m";
-        }
+        scoreText.text = ScoreManager.instance.SetScoreString(_score);
     }
 }

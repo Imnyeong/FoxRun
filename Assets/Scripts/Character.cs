@@ -39,8 +39,8 @@ public class Character : MonoBehaviour
     {
         new Color32(255,255,255,90),
         new Color32(255,255,255,180),
-        new Color32(255,255,255,255),
-        new Color32(255,255,255,0),
+        //new Color32(255,255,255,255),
+        //new Color32(255,255,255,0),
     };
     void Start()
     {   
@@ -93,8 +93,13 @@ public class Character : MonoBehaviour
         if (other.gameObject.tag == "Monster" && !unBeatTime)
         {
             animator.SetTrigger("Hurt");
-            health--;
-            UIManager.instance.hpIcons[health].color = heartColors[3];
+
+            if(health > 0)
+            {
+                health--;
+            }
+            UIManager.instance.hpIcons[health].gameObject.SetActive(false);
+            //UIManager.instance.hpIcons[health].color = heartColors[3];
             AudioManager.instance.PlayEffect(AudioManager.EffectType.Hit);
 
             if (health <= 0)
@@ -111,7 +116,8 @@ public class Character : MonoBehaviour
         else if (other.gameObject.tag == "Item" && health < maxHealth)
         {
             health++;
-            UIManager.instance.hpIcons[health].color = heartColors[2];
+            UIManager.instance.hpIcons[health].gameObject.SetActive(true);
+            //UIManager.instance.hpIcons[health].color = heartColors[2];
         }
     }
     private void Die()

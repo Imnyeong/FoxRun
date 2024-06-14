@@ -8,8 +8,6 @@ public class GameOverPanel : MonoBehaviour
     [SerializeField] private Button replayButton;
     [SerializeField] private Button exitButton;
 
-    private const float km = 1000.0f;
-
     private void Awake()
     {
         replayButton.onClick.AddListener(delegate 
@@ -26,14 +24,8 @@ public class GameOverPanel : MonoBehaviour
 
     public void ShowPanel(float _score)
     {
-        if (_score >= km)
-        {
-            scoreText.text = $"Your Score\n{(_score / km).ToString("F1")} km";
-        }
-        else
-        {
-            scoreText.text = $"Your Score\n{_score.ToString("F1")} m";
-        }
+        scoreText.text = $"Your Score\n{ScoreManager.instance.SetScoreString(_score)}";
+        ScoreManager.instance.SaveRecords(_score);
         this.gameObject.SetActive(true);
     }
 }
