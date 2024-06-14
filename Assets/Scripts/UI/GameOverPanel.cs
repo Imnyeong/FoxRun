@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -10,25 +8,27 @@ public class GameOverPanel : MonoBehaviour
     [SerializeField] private Button replayButton;
     [SerializeField] private Button exitButton;
 
+    private const float km = 1000.0f;
+
     private void Awake()
     {
         replayButton.onClick.AddListener(delegate 
         {
-            AudioManager.instance.PlayClickSound();
+            AudioManager.instance.PlayEffect(AudioManager.EffectType.Click);
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         });
         exitButton.onClick.AddListener(delegate
         {
-            AudioManager.instance.PlayClickSound();
+            AudioManager.instance.PlayEffect(AudioManager.EffectType.Click);
             Application.Quit();
         });
     }
 
     public void ShowPanel(float _score)
     {
-        if (_score >= 1000.0f)
+        if (_score >= km)
         {
-            scoreText.text = $"Your Score\n{(_score / 1000.0f).ToString("F1")} km";
+            scoreText.text = $"Your Score\n{(_score / km).ToString("F1")} km";
         }
         else
         {

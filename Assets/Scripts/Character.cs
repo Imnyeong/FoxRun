@@ -81,7 +81,7 @@ public class Character : MonoBehaviour
 
         animator.SetTrigger("Jump");
         rigid.AddForce(new Vector2(0, jumpPower), ForceMode2D.Impulse);
-        AudioManager.instance.PlayJumpSound();
+        AudioManager.instance.PlayEffect(AudioManager.EffectType.Jump);
 
         yield return new WaitForSecondsRealtime(jumpDelay);
 
@@ -95,7 +95,7 @@ public class Character : MonoBehaviour
             animator.SetTrigger("Hurt");
             health--;
             UIManager.instance.hpIcons[health].color = heartColors[3];
-            AudioManager.instance.PlayHitSound();
+            AudioManager.instance.PlayEffect(AudioManager.EffectType.Hit);
 
             if (health <= 0)
             {

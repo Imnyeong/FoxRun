@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
         StartButton.gameObject.SetActive(false);
         character.Move(isPlay);
 
-        AudioManager.instance.PlayClickSound();
+        AudioManager.instance.PlayEffect(AudioManager.EffectType.Click);
         UIManager.instance.ActiveUI(isPlay);
         ScoreManager.instance.StartScore();
     }
@@ -33,9 +33,8 @@ public class GameManager : MonoBehaviour
         isPlay = false;
         character.Move(isPlay);
 
-        AudioManager.instance.PlayGameOverSound();
+        AudioManager.instance.PlayEffect(AudioManager.EffectType.GameOver);
         UIManager.instance.ActiveUI(isPlay);
         UIManager.instance.gameoverPanel.ShowPanel(ScoreManager.instance.score);
     }
-
 }

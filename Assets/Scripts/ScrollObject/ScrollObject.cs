@@ -3,7 +3,7 @@
 public class ScrollObject : MonoBehaviour
 {
     public bool canStop = false;
-    private float moveValue = -1.0f;
+    private const float moveValue = -1.0f;
 
     [SerializeField] private float speed;
     [SerializeField] private float startPosition;
@@ -13,7 +13,7 @@ public class ScrollObject : MonoBehaviour
 
     private void Start()
     {
-        startVector3 = new Vector3(-1 * (endPosition - startPosition), 0, 0);
+        startVector3 = new Vector3(moveValue * (endPosition - startPosition), 0, 0);
     }
     private void Update()
     {
@@ -45,7 +45,6 @@ public class ScrollObject : MonoBehaviour
         }
         else
         {
-            //transform.Translate(-1 * (endPosition - startPosition), 0, 0);
             transform.Translate(startVector3);
         }
     }

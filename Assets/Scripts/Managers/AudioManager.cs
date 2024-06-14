@@ -9,6 +9,13 @@ public class AudioManager : MonoBehaviour
 
     [SerializeField] private AudioSource effectSource;
     [SerializeField] private AudioClip[] effectClips;
+    public enum EffectType
+    {
+        Click,
+        Jump,
+        Hit,
+        GameOver
+    };
 
     private void Awake()
     {
@@ -21,25 +28,31 @@ public class AudioManager : MonoBehaviour
     {
         bgmSource.Play();
     }
-    public void PlayClickSound()
+    public void PlayEffect(EffectType _type)
     {
-        effectSource.clip = Array.Find(effectClips, clip => clip.name == "Click");
-        effectSource.Play();
-    }
-
-    public void PlayJumpSound()
-    {
-        effectSource.clip = Array.Find(effectClips, clip => clip.name == "Jump");
-        effectSource.Play();
-    }
-    public void PlayHitSound()
-    {
-        effectSource.clip = Array.Find(effectClips, clip => clip.name == "Hit");
-        effectSource.Play();
-    }
-    public void PlayGameOverSound()
-    {
-        effectSource.clip = Array.Find(effectClips, clip => clip.name == "GameOver");
+        switch(_type)
+        {
+            case EffectType.Click:
+                {
+                    effectSource.clip = Array.Find(effectClips, clip => clip.name == "Click");
+                    break;
+                }
+            case EffectType.Jump:
+                {
+                    effectSource.clip = Array.Find(effectClips, clip => clip.name == "Jump");
+                    break;
+                }            
+            case EffectType.Hit:
+                {
+                    effectSource.clip = Array.Find(effectClips, clip => clip.name == "Hit");
+                    break;
+                }            
+            case EffectType.GameOver:
+                {
+                    effectSource.clip = Array.Find(effectClips, clip => clip.name == "GameOver");
+                    break;
+                }
+        }
         effectSource.Play();
     }
 }
