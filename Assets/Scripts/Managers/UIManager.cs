@@ -7,14 +7,22 @@ public class UIManager : MonoBehaviour
     public static UIManager instance = null;
     public Image[] hpIcons;
     public Text scoreText;
+
+    public GameObject introUI;
+    public GameObject rankingUI;
+    public GameObject ingameUI;
+    public GameObject gameoverUI;
     public GameOverPanel gameoverPanel;
 
+    [SerializeField] private Button rankingButton;
     private const float km = 1000.0f;
 
-    private Color32[] hpColors = new Color32[]
+    public enum UIType
     {
-        new Color32(255, 255, 255, 0),
-        new Color32(255, 255, 255, 255)
+        Intro,
+        Ranking,
+        InGame,
+        GameOver
     };
     private void Awake()
     {
@@ -22,6 +30,10 @@ public class UIManager : MonoBehaviour
         {
             instance = this;
         }
+        rankingButton.onClick.AddListener(delegate
+        {
+            ChangeUI(UIType.Ranking);
+        });
     }
     public void OnClickJump()
     {
@@ -31,13 +43,12 @@ public class UIManager : MonoBehaviour
     {
         GameManager.instance.character.inputCrouch = _inputCrouch;
     }
-    public void ActiveUI(bool _isShow)
+    public void ChangeUI(UIType _type)
     {
-        foreach(Image image in hpIcons)
-        {
-            image.color = hpColors[Convert.ToInt32(_isShow)];
-        }
-        scoreText.gameObject.SetActive(_isShow);
+        introUI.SetActive(_type == UIType.Intro);
+        rankingUI.SetActive(_type == UIType.Ranking);
+        ingameUI.SetActive(_type == UIType.InGame);
+        gameoverUI.SetActive(_type == UIType.GameOver);
     }
     public void SetScore(float _score)
     {

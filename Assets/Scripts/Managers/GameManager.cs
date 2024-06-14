@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
         character.Move(isPlay);
 
         AudioManager.instance.PlayEffect(AudioManager.EffectType.Click);
-        UIManager.instance.ActiveUI(isPlay);
+        UIManager.instance.ChangeUI(UIManager.UIType.InGame);
         ScoreManager.instance.StartScore();
     }
     public void GameOver()
@@ -34,7 +34,7 @@ public class GameManager : MonoBehaviour
         character.Move(isPlay);
 
         AudioManager.instance.PlayEffect(AudioManager.EffectType.GameOver);
-        UIManager.instance.ActiveUI(isPlay);
+        UIManager.instance.ChangeUI(UIManager.UIType.GameOver);
         UIManager.instance.gameoverPanel.ShowPanel(ScoreManager.instance.score);
     }
 }
