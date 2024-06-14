@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,6 +8,14 @@ public class UIManager : MonoBehaviour
     public Image[] hpIcons;
     public Text scoreText;
     public GameOverPanel gameoverPanel;
+
+    private const float km = 1000.0f;
+
+    private Color32[] hpColors = new Color32[]
+    {
+        new Color32(255, 255, 255, 0),
+        new Color32(255, 255, 255, 255)
+    };
     private void Awake()
     {
         if(instance == null)
@@ -16,37 +25,25 @@ public class UIManager : MonoBehaviour
     }
     public void OnClickJump()
     {
-        Character.instance.inputJump = true;
+        GameManager.instance.character.inputJump = true;
     }
-    public void PointerDownCrouch()
+    public void ChangeCrouch(bool _inputCrouch)
     {
-        Character.instance.inputCrouch = true;
+        GameManager.instance.character.inputCrouch = _inputCrouch;
     }
-    public void PointerUpCrouch()
-    {
-        Character.instance.inputCrouch = false;
-    }
-    public void ShowUI()
+    public void ActiveUI(bool _isShow)
     {
         foreach(Image image in hpIcons)
         {
-            image.color = new Color32(255, 255, 255, 255);
+            image.color = hpColors[Convert.ToInt32(_isShow)];
         }
-        scoreText.gameObject.SetActive(true);
-    }
-    public void HideUI()
-    {
-        foreach (Image image in hpIcons)
-        {
-            image.color = new Color32(255, 255, 255, 0);
-        }
-        scoreText.gameObject.SetActive(false);
+        scoreText.gameObject.SetActive(_isShow);
     }
     public void SetScore(float _score)
     {
-        if(_score >= 1000.0f)
+        if(_score >= km)
         {
-            scoreText.text = $"{(_score / 1000.0f).ToString("F1")} km";
+            scoreText.text = $"{(_score / km).ToString("F1")} km";
         }
         else
         {

@@ -6,9 +6,8 @@ public class AudioManager : MonoBehaviour
     public static AudioManager instance = null;
 
     [SerializeField] private AudioSource bgmSource;
-    [SerializeField] private AudioSource effectSource;
 
-    [SerializeField] private AudioClip[] bgmClips;
+    [SerializeField] private AudioSource effectSource;
     [SerializeField] private AudioClip[] effectClips;
 
     private void Awake()
@@ -20,7 +19,6 @@ public class AudioManager : MonoBehaviour
     }
     private void Start()
     {
-        bgmSource.clip = bgmClips[UnityEngine.Random.Range(0, bgmClips.Length)];
         bgmSource.Play();
     }
     public void PlayClickSound()

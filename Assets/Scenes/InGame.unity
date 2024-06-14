@@ -314,12 +314,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bgmSource: {fileID: 1391195759}
   effectSource: {fileID: 213789566}
-  bgmClips:
-  - {fileID: 8300000, guid: 033766cc31c97904bae4404b8a079544, type: 3}
-  - {fileID: 8300000, guid: fc5af015011ea3745b7f78ea1dd1049f, type: 3}
-  - {fileID: 8300000, guid: 559c232a43caebe41870ce54786f604e, type: 3}
-  - {fileID: 8300000, guid: 51a4f1157b7ff1449b5e5cf064d584c7, type: 3}
-  - {fileID: 8300000, guid: 06906d718be5b6a4cb2df8732bf39832, type: 3}
   effectClips:
   - {fileID: 8300000, guid: ffb159a21c8a04135a5616979c828fab, type: 3}
   - {fileID: 8300000, guid: 1d1f2a1e9d641f644810e56422b22539, type: 3}
@@ -1608,15 +1602,15 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 822726530}
           m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
-          m_MethodName: PointerDownCrouch
-          m_Mode: 1
+          m_MethodName: ChangeCrouch
+          m_Mode: 6
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
             m_IntArgument: 0
             m_FloatArgument: 0
             m_StringArgument: 
-            m_BoolArgument: 0
+            m_BoolArgument: 1
           m_CallState: 2
   - eventID: 3
     callback:
@@ -1624,8 +1618,8 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 822726530}
           m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
-          m_MethodName: PointerUpCrouch
-          m_Mode: 1
+          m_MethodName: ChangeCrouch
+          m_Mode: 6
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -2380,7 +2374,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 916e5189397dd1a4ab635f43924e5ced, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  score: 0
 --- !u!4 &741677913
 Transform:
   m_ObjectHideFlags: 0
@@ -3422,8 +3415,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e86938c2e6b516e469a902787a0b1300, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isPlay: 0
-  StartButton: {fileID: 1213059184}
+  character: {fileID: 2136803555}
+  StartButton: {fileID: 1213059186}
 --- !u!4 &1365486437
 Transform:
   m_ObjectHideFlags: 0
@@ -3481,7 +3474,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 06906d718be5b6a4cb2df8732bf39832, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.5
   m_Pitch: 1
@@ -4757,14 +4750,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fae43cad8f99f94887798897ae493e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputCrouch: 0
-  inputJump: 0
-  unBeatTime: 0
-  isCrouch: 0
   rigid: {fileID: 2136803554}
   image: {fileID: 282910378}
   animator: {fileID: 2136803552}
   boxCollider: {fileID: 2136803553}
+  inputCrouch: 0
+  inputJump: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

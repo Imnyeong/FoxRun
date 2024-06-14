@@ -1,37 +1,47 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Character : MonoBehaviour
 {
-    public static Character instance = null;
+    private const int maxHealth = 3;
+    private const int hitDelay = 10;
+    private bool unBeatTime = false;
 
-    private int maxHealth = 3;
-    private float jumpPower = 8.0f;
-
-    [HideInInspector] public bool inputCrouch = false;
-    [HideInInspector] public bool inputJump = false;
-    [HideInInspector] public bool unBeatTime = false;
-    [HideInInspector] public bool isCrouch = false;
+    private const float jumpPower = 8.0f;
 
     [SerializeField] private Rigidbody2D rigid;
     [SerializeField] private Image image;
     [SerializeField] private Animator animator;
     [SerializeField] private BoxCollider2D boxCollider;
 
+    [HideInInspector] public bool inputCrouch = false;
+    [HideInInspector] public bool inputJump = false;
+
+    [HideInInspector] public bool isCrouch { get; private set; } = false;
     private bool isJump = false;
     private bool isDie = false;
     private int health;
     private float jumpDelay = 1.8f;
 
-    private void Awake()
+    private Vector2[] colliderOffsets = new Vector2[]
     {
-        if(instance == null)
-        {
-            instance = this;
-        }
-    }
-
+        new Vector2(-0.1f, -0.3f),
+        new Vector2(0.1f, -0.4f)
+    };
+    private Vector2[] colliderSizes = new Vector2[]
+    {
+        new Vector2(1.2f, 1.4f),
+        new Vector2(1.3f, 1.2f)
+    };
+    private Color32[] heartColors = new Color32[]
+    {
+        new Color32(255,255,255,90),
+        new Color32(255,255,255,180),
+        new Color32(255,255,255,255),
+        new Color32(255,255,255,0),
+    };
     void Start()
     {   
         health = maxHealth;
@@ -54,8 +64,7 @@ public class Character : MonoBehaviour
         }
         Crouch();
     }
-
-    void Crouch()
+    private void Crouch()
     {
         if(isJump)
             return;
@@ -63,18 +72,9 @@ public class Character : MonoBehaviour
         isCrouch = inputCrouch;
         animator.SetBool("Crouch", isCrouch);
 
-        if (inputCrouch)
-        {
-            boxCollider.offset = new Vector2(0.1f, -0.4f);
-            boxCollider.size = new Vector2(1.3f, 1.2f);
-        }
-        else
-        {
-            boxCollider.offset = new Vector2(-0.1f, -0.3f);
-            boxCollider.size = new Vector2(1.2f, 1.4f);
-        }
+        boxCollider.offset = colliderOffsets[Convert.ToInt32(inputCrouch)];
+        boxCollider.size = colliderSizes[Convert.ToInt32(inputCrouch)];
     }
-
     private IEnumerator JumpCoroutine()
     {
         isJump = true;
@@ -94,7 +94,7 @@ public class Character : MonoBehaviour
         {
             animator.SetTrigger("Hurt");
             health--;
-            UIManager.instance.hpIcons[health].color = new Color32(255, 255, 255, 0);
+            UIManager.instance.hpIcons[health].color = heartColors[3];
             AudioManager.instance.PlayHitSound();
 
             if (health <= 0)
@@ -111,35 +111,28 @@ public class Character : MonoBehaviour
         else if (other.gameObject.tag == "Item" && health < maxHealth)
         {
             health++;
-            UIManager.instance.hpIcons[health].color = new Color32(255, 255, 255, 255);
+            UIManager.instance.hpIcons[health].color = heartColors[2];
         }
     }
-
-    void Die()
+    private void Die()
     {
         isDie = true;
         animator.SetBool("Move", false);
-        GameManager.instance.isPlay = false;
         GameManager.instance.GameOver();
     }
-
     private IEnumerator HitCoroutine()
     {
         int count = 0;
-        while(count < 10)
+        Color32 prevColor = image.color;
+
+        while(count < hitDelay)
         {
-            if(count%2 == 0)
-            {
-                image.color = new Color32(255,255,255,90);
-            }
-            else
-            {
-                image.color = new Color32(255,255,255,180);
-            }
+            image.color = heartColors[count % 2];
             yield return new WaitForSecondsRealtime(0.2f);
             count++;
         }
-        image.color = new Color32(255, 255, 255, 255);
+
+        image.color = prevColor;
         unBeatTime = false;
     }
 }
